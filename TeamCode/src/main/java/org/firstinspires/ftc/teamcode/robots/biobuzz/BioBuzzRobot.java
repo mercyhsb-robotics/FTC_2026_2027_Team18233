@@ -16,10 +16,7 @@ public class BioBuzzRobot extends OpMode {
 
     private Launcher launcher;
     private Intake intake;
-    private Elevator elevator;
-    private CRServo servoLeft;
-
-    private CRServo servoRight;
+    private Servo claw;
 
     double forward;
     double strafe;
@@ -39,9 +36,8 @@ public class BioBuzzRobot extends OpMode {
         intake = new Intake();
         intake.init(hardwareMap);
 
-        // Initialize feeders
-        servoLeft = hardwareMap.get(CRServo.class, HardwareMapConstants.LEFT_INTAKE_SERVO);
-        servoRight = hardwareMap.get(CRServo.class, HardwareMapConstants.RIGHT_INTAKE_SERVO);
+        // Initialize claw
+        claw = hardwareMap.get(Servo.class, "claw");
     }
 
     @Override
@@ -61,22 +57,13 @@ public class BioBuzzRobot extends OpMode {
 
         mecanumDrive.drive(forward, strafe, rotate);
 
-        // Example controls for first iteration of BioBuzz robot.   It is
-        // up to team to determine what controls they want.
-        // Controls for left and right feeders
+        // Controls for claw
         if (gamepad1.left_trigger > 0.5) {
-            servoLeft.setPower(1);
-            servoRight.setPower(1);
-        } else {
-            servoLeft.setPower(0);
-            servoRight.setPower(0);
+            claw.setPosition(0);
         }
+
         if (gamepad1.right_trigger > 0.5) {
-            servoLeft.setPower(-1);
-            servoLeft.setPower(-1);
-        } else {
-            servoLeft.setPower(0);
-            servoRight.setPower(0);
+            claw.setPosition(0.75);
         }
 
         // Controls for feeder
@@ -106,14 +93,14 @@ public class BioBuzzRobot extends OpMode {
         if (gamepad1.dpad_up) {
             // TODO
             telemetry.addLine("'dpad_up' was pressed");
-            launcher.startFlywheel();
-            launcher.increaseRpm(700);
+//            launcher.startFlywheel();
+//            launcher.increaseRpm(700);
         }
         if (gamepad1.dpad_down) {
             // TODO
             telemetry.addLine("'dpad_down' was pressed");
-            launcher.startFlywheel();
-            launcher.increaseRpm(800);
+//            launcher.startFlywheel();
+//            launcher.increaseRpm(800);
         }
         if (gamepad1.dpad_left) {
             launcher.reverseFlywheel();
