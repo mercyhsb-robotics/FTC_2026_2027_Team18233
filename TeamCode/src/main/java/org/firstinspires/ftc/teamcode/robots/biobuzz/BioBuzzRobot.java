@@ -17,9 +17,9 @@ public class BioBuzzRobot extends OpMode {
     private Launcher launcher;
     private Intake intake;
     private Elevator elevator;
-    private CRServo servoLeft;
-
-    private CRServo servoRight;
+    private Servo claw;
+//
+//    private CRServo servoRight;
 
     double forward;
     double strafe;
@@ -39,9 +39,9 @@ public class BioBuzzRobot extends OpMode {
         intake = new Intake();
         intake.init(hardwareMap);
 
-        // Initialize feeders
-        servoLeft = hardwareMap.get(CRServo.class, HardwareMapConstants.LEFT_INTAKE_SERVO);
-        servoRight = hardwareMap.get(CRServo.class, HardwareMapConstants.RIGHT_INTAKE_SERVO);
+        // Initialize claw
+        claw = hardwareMap.get(Servo.class, "claw");
+
     }
 
     @Override
@@ -61,22 +61,13 @@ public class BioBuzzRobot extends OpMode {
 
         mecanumDrive.drive(forward, strafe, rotate);
 
-        // Example controls for first iteration of BioBuzz robot.   It is
-        // up to team to determine what controls they want.  
-        // Controls for left and right feeders
+        // Controls for claw
         if (gamepad1.left_trigger > 0.5) {
-            servoLeft.setPower(1);
-            servoRight.setPower(1);
-        } else {
-            servoLeft.setPower(0);
-            servoRight.setPower(0);
+            claw.setPosition(0);
         }
+
         if (gamepad1.right_trigger > 0.5) {
-            servoLeft.setPower(-1);
-            servoLeft.setPower(-1);
-        } else {
-            servoLeft.setPower(0);
-            servoRight.setPower(0);
+            claw.setPosition(1);
         }
 
         // Controls for feeder
@@ -93,9 +84,9 @@ public class BioBuzzRobot extends OpMode {
             launcher.launch(false);
 
         // Controls for intake
-        if (gamepad1.cross)
-            intake.startIntake();
         if (gamepad1.circle)
+            intake.startIntake();
+        if (gamepad1.cross)
             intake.stopIntake();
 
         // Controls for DPad

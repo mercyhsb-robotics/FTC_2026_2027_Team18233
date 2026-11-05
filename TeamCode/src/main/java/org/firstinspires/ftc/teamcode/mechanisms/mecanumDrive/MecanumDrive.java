@@ -22,23 +22,11 @@ public class MecanumDrive {
         frontRightMotor = hardwareMap.get(DcMotor.class, HardwareMapConstants.FRONT_RIGHT_MOTOR);
         backRightMotor = hardwareMap.get(DcMotor.class, HardwareMapConstants.BACK_RIGHT_MOTOR);
 
-        // GoBilda
-        frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
-        backLeftMotor.setDirection(DcMotor.Direction.FORWARD);
+        // RevRobotics
+        frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
         backRightMotor.setDirection(DcMotor.Direction.REVERSE);
-
-        // RevRobotics
-//        frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
-//        backLeftMotor.setDirection(DcMotor.Direction.FORWARD);
-//        frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
-//        backRightMotor.setDirection(DcMotor.Direction.FORWARD);
-
-        // Works on Star Robot
-//        frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
-//        backLeftMotor.setDirection(DcMotor.Direction.FORWARD);
-//        frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
-//        backRightMotor.setDirection(DcMotor.Direction.REVERSE);
 
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
