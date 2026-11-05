@@ -17,9 +17,7 @@ public class Launcher {
     private CRServo feeder;
 
     public final static int LAUNCHER_TARGET_VELOCITY = 1100;
-    //changing velocity from 1250->500
-    public final static int LAUNCHER_MIN_VELOCITY = 950;
-    //changing velocity from 1200->450
+    public final static int LAUNCHER_MIN_VELOCITY = 1200;
 
     public void init (HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -77,13 +75,22 @@ public class Launcher {
         feeder.setPower(0);
     }
 
+    public void startFlywheel() {
+        flywheel.setPower(1);
+        flywheel.setVelocity(LAUNCHER_TARGET_VELOCITY);
+    }
+
+    public void reverseFlywheel()   {
+        flywheel.setPower(-1);
+    }
+
     public void feederForward() {
-        feeder.setPower(0.3);
+        feeder.setPower(0.5);
         feeder.setDirection(CRServo.Direction.FORWARD);
     }
 
     public void feederReverse() {
-        feeder.setPower(0.3);
+        feeder.setPower(0.5);
         feeder.setDirection(CRServo.Direction.REVERSE);
     }
 
