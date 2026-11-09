@@ -16,14 +16,18 @@ public class BioBuzzRobot extends OpMode {
 
     private Launcher launcher;
     private Intake intake;
-    private Elevator elevator;
-    private CRServo servoLeft;
-
-    private CRServo servoRight;
+    private Servo claw;
 
     double forward;
     double strafe;
     double rotate;
+
+    private static float CLAW_POS_DOWN = 0.37F;
+
+    private static float CLAW_POS_UP = 0.0F;
+
+    private static float FEEDER_POS_DOWN = 1;
+    private static float FEEDER_POS_UP = 0.67F;
 
     @Override
     public void init() {
@@ -39,9 +43,9 @@ public class BioBuzzRobot extends OpMode {
         intake = new Intake();
         intake.init(hardwareMap);
 
-        // Initialize feeders
-        servoLeft = hardwareMap.get(CRServo.class, HardwareMapConstants.LEFT_INTAKE_SERVO);
-        servoRight = hardwareMap.get(CRServo.class, HardwareMapConstants.RIGHT_INTAKE_SERVO);
+        // Initialize claw
+        claw = hardwareMap.get(Servo.class, "claw");
+        claw.setPosition(0.0);
     }
 
     @Override
@@ -61,42 +65,35 @@ public class BioBuzzRobot extends OpMode {
 
         mecanumDrive.drive(forward, strafe, rotate);
 
-        // Example controls for first iteration of BioBuzz robot.   It is
-        // up to team to determine what controls they want.  
-        // Controls for left and right feeders
+        // Controls for claw
         if (gamepad1.left_trigger > 0.5) {
-            servoLeft.setPower(1);
-            servoRight.setPower(1);
-        } else {
-            servoLeft.setPower(0);
-            servoRight.setPower(0);
+            claw.setPosition(CLAW_POS_UP);
         }
+
         if (gamepad1.right_trigger > 0.5) {
-            servoLeft.setPower(-1);
-            servoLeft.setPower(-1);
-        } else {
-            servoLeft.setPower(0);
-            servoRight.setPower(0);
+            claw.setPosition(CLAW_POS_DOWN);
         }
 
         // Controls for feeder
         if (gamepad1.left_bumper)
-            launcher.feederReverse();
+            launcher.feederDown();
 
         if (gamepad1.right_bumper)
-            launcher.feederForward();
+            launcher.feederUp();
 
         // Controls for launcher
-        if (gamepad1.triangle)
-            launcher.launch(true);
-        if (gamepad1.square) // square
+        if (gamepad1.triangle) {
+            launcher.startFlywheel();
+        }
+        if (gamepad1.square) {
             launcher.launch(false);
+        }
 
         // Controls for intake
         if (gamepad1.cross)
-            intake.startIntake();
-        if (gamepad1.circle)
             intake.stopIntake();
+        if (gamepad1.circle)
+            intake.startIntake();
 
         // Controls for DPad
         // TODO:  We can use this for automated features, such as automatically
@@ -104,18 +101,20 @@ public class BioBuzzRobot extends OpMode {
         if (gamepad1.dpad_up) {
             // TODO
             telemetry.addLine("'dpad_up' was pressed");
+            launcher.startFlywheel();
+            launcher.increaseRpm(700);
         }
         if (gamepad1.dpad_down) {
             // TODO
             telemetry.addLine("'dpad_down' was pressed");
+            launcher.startFlywheel();
+            launcher.increaseRpm(800);
         }
         if (gamepad1.dpad_left) {
-            // TODO
-            telemetry.addLine("'dpad_left' was pressed");
+            launcher.reverseFlywheel();
         }
         if (gamepad1.dpad_right) {
-            // TODO
-            telemetry.addLine("'dpad_right' was pressed");
+            intake.reverseIntake();
         }
 
 

@@ -28,11 +28,11 @@ public class LauncherTest extends OpMode {
         }
 
         if (gamepad1.dpad_left) {
-            launcher.feederReverse();
+            launcher.feederDown();
         }
 
         if (gamepad1.dpad_right) {
-            launcher.feederForward();
+            launcher.feederUp();
         }
 
         if (gamepad1.square) {
