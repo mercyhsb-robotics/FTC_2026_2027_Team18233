@@ -22,6 +22,13 @@ public class BioBuzzRobot extends OpMode {
     double strafe;
     double rotate;
 
+    private static float CLAW_POS_DOWN = 0.37F;
+
+    private static float CLAW_POS_UP = 0.0F;
+
+    private static float FEEDER_POS_DOWN = 1;
+    private static float FEEDER_POS_UP = 0.67F;
+
     @Override
     public void init() {
         // Initialize mecanum drive
@@ -38,6 +45,7 @@ public class BioBuzzRobot extends OpMode {
 
         // Initialize claw
         claw = hardwareMap.get(Servo.class, "claw");
+        claw.setPosition(0.0);
     }
 
     @Override
@@ -59,19 +67,19 @@ public class BioBuzzRobot extends OpMode {
 
         // Controls for claw
         if (gamepad1.left_trigger > 0.5) {
-            claw.setPosition(0);
+            claw.setPosition(CLAW_POS_UP);
         }
 
         if (gamepad1.right_trigger > 0.5) {
-            claw.setPosition(0.75);
+            claw.setPosition(CLAW_POS_DOWN);
         }
 
         // Controls for feeder
         if (gamepad1.left_bumper)
-            launcher.feederReverse();
+            launcher.feederDown();
 
         if (gamepad1.right_bumper)
-            launcher.feederForward();
+            launcher.feederUp();
 
         // Controls for launcher
         if (gamepad1.triangle) {
@@ -83,9 +91,9 @@ public class BioBuzzRobot extends OpMode {
 
         // Controls for intake
         if (gamepad1.cross)
-            intake.startIntake();
-        if (gamepad1.circle)
             intake.stopIntake();
+        if (gamepad1.circle)
+            intake.startIntake();
 
         // Controls for DPad
         // TODO:  We can use this for automated features, such as automatically
@@ -93,14 +101,14 @@ public class BioBuzzRobot extends OpMode {
         if (gamepad1.dpad_up) {
             // TODO
             telemetry.addLine("'dpad_up' was pressed");
-//            launcher.startFlywheel();
-//            launcher.increaseRpm(700);
+            launcher.startFlywheel();
+            launcher.increaseRpm(700);
         }
         if (gamepad1.dpad_down) {
             // TODO
             telemetry.addLine("'dpad_down' was pressed");
-//            launcher.startFlywheel();
-//            launcher.increaseRpm(800);
+            launcher.startFlywheel();
+            launcher.increaseRpm(800);
         }
         if (gamepad1.dpad_left) {
             launcher.reverseFlywheel();

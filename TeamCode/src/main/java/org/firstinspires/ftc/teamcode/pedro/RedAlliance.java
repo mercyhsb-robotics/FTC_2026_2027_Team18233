@@ -176,7 +176,7 @@ RedAlliance extends LinearOpMode {
                     telemetry.update();
                     launcher.launch(true);
                     waitMs(1000);
-                    launcher.feederForward();
+                    launcher.feederUp();
                 }),
 
                 // Step 4: Allow time for launching.
