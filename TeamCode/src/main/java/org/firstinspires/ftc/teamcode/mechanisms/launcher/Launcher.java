@@ -14,10 +14,13 @@ public class Launcher {
 
     private Telemetry telemetry;
     private DcMotorEx flywheel;
-    private CRServo feeder;
+    private Servo feeder;
 
-    public final static int LAUNCHER_TARGET_VELOCITY = 1100;
+    public final static int LAUNCHER_TARGET_VELOCITY = 1200;
     public final static int LAUNCHER_MIN_VELOCITY = 1200;
+
+    private static float FEEDER_POS_DOWN = 1;
+    private static float FEEDER_POS_UP = 0.67F;
 
     public void init (HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -25,9 +28,12 @@ public class Launcher {
         // Initialize flywheel and feeder
         flywheel = hardwareMap.get(DcMotorEx.class, HardwareMapConstants.FLYWHEEL);
         flywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        flywheel.setDirection(DcMotor.Direction.REVERSE);
         flywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        feeder = hardwareMap.get(CRServo.class, HardwareMapConstants.FEEDER);
+        feeder = hardwareMap.get(Servo.class, HardwareMapConstants.FEEDER);
+        feeder.setDirection(Servo.Direction.REVERSE);
+        feeder.setPosition(FEEDER_POS_DOWN);
     }
 
     public void increaseRpm(long rpm) {
@@ -57,10 +63,10 @@ public class Launcher {
          * inside the hopper.
          */
         if (isLaunch && flywheel.getVelocity() > LAUNCHER_MIN_VELOCITY) {
-            feeder.setPower(0.3);
+            feeder.setPosition(FEEDER_POS_UP);
 //            intakePower += 0.5;
         } else {
-            feeder.setPower(0);
+            feeder.setPosition(FEEDER_POS_DOWN );
         }
     }
 
@@ -72,7 +78,7 @@ public class Launcher {
     public void stop() {
 
         flywheel.setPower(0);
-        feeder.setPower(0);
+        feeder.setPosition(FEEDER_POS_DOWN );
     }
 
     public void startFlywheel() {
@@ -84,17 +90,15 @@ public class Launcher {
         flywheel.setPower(-1);
     }
 
-    public void feederForward() {
-        feeder.setPower(0.5);
-        feeder.setDirection(CRServo.Direction.FORWARD);
+    public void feederUp() {
+        feeder.setPosition(FEEDER_POS_UP );
     }
 
-    public void feederReverse() {
-        feeder.setPower(0.5);
-        feeder.setDirection(CRServo.Direction.REVERSE);
+    public void feederDown() {
+        feeder.setPosition(FEEDER_POS_DOWN );
     }
 
     public void feederStop() {
-        feeder.setPower(0);
+        feeder.setPosition(FEEDER_POS_DOWN );;
     }
 }
